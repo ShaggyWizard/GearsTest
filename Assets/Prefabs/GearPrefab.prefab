@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5557471649182015919}
   - component: {fileID: 861816348306064485}
-  - component: {fileID: 7946653373900561022}
   - component: {fileID: 1927272181935475391}
   m_Layer: 0
   m_Name: GearPrefab
@@ -52,19 +51,6 @@ MonoBehaviour:
   _spriteOffset: {x: 0, y: 0}
   _spriteRenderer: {fileID: 3124721423427641546}
   _collider: {fileID: 1927272181935475391}
---- !u!114 &7946653373900561022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3292576784467594352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc4d5e478dd02f24bacd3e7235a059ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gear: {fileID: 861816348306064485}
 --- !u!58 &1927272181935475391
 CircleCollider2D:
   m_ObjectHideFlags: 0

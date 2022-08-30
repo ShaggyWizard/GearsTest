@@ -5,9 +5,12 @@ using UnityEngine;
 [SelectionBase]
 public class Pin : MonoBehaviour, IPlacement
 {
-    private IPlaceable _placeable;
-
-
-    public bool Empty => _placeable == null;
+    public IPlaceable Placeable { get; private set; }
     public Vector3 Position => transform.position;
+
+    public void SetPlaceable(IPlaceable placeable)
+    {
+        Placeable = placeable;
+        Placeable?.SetPlacement(this);
+    }
 }

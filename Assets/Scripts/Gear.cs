@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 
@@ -7,25 +6,20 @@ using UnityEngine;
 [RequireComponent(typeof(CircleCollider2D))]
 public class Gear : MonoBehaviour, IDragable, IPlaceable
 {
-    [SerializeField] private float _innerRadius;
-    [SerializeField] private float _outerRadius;
-    [SerializeField] private Vector2 _spriteOffset;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private CircleCollider2D _collider;
-
-
-    public float InnerRadius => _innerRadius;
-    public float OuterRadius => _outerRadius;
+    [SerializeField] private GearObject _gearObject;
 
 
     private int lastIndex;
     private DragableObject _dragable;
-    private IPlacement _placement = null;
 
+    public IPlacement Placement { get; private set; }
 
     private void Start()
     {
         _dragable = new DragableObject(transform);
+        Init(_gearObject);
         Release();
     }
 
@@ -33,11 +27,8 @@ public class Gear : MonoBehaviour, IDragable, IPlaceable
     public void Init(GearObject gearSO)
     {
         _spriteRenderer.sprite = gearSO.sprite;
-        _spriteOffset = gearSO.offset;
-        _spriteRenderer.transform.localPosition = _spriteOffset * -1f;
-        _innerRadius = gearSO.innerRadius;
-        _outerRadius = gearSO.outerRadius;
-        _collider.radius = _innerRadius;
+        _spriteRenderer.transform.localPosition = gearSO.offset * -1f;
+        _collider.radius = gearSO.innerRadius;
     }
     public void PickUp(Vector3 clickPos)
     {
@@ -60,7 +51,7 @@ public class Gear : MonoBehaviour, IDragable, IPlaceable
             if (overlaps[i].transform.TryGetComponent(out IPlacement overlapPlacement))
             {
                 float distance = (overlapPlacement.Position - transform.position).magnitude;
-                if (newPlacement == null || distance < minDistance && _placement.Empty)
+                if (newPlacement == null || distance < minDistance)
                 {
                     minDistance = distance;
                     newPlacement = overlapPlacement;
@@ -70,10 +61,28 @@ public class Gear : MonoBehaviour, IDragable, IPlaceable
 
         if (newPlacement != null)
         {
-            _placement = newPlacement;
+            if (newPlacement.Placeable == null)
+            {
+                newPlacement.SetPlaceable(this);
+            }
+            else
+            {
+                IPlacement.Swap(newPlacement, Placement);
+            }
         }
+        else
+        {
+            SetPosition(Placement);
+        }
+    }
+    public void SetPlacement(IPlacement newPlacement)
+    {
+        Placement = newPlacement;
+        SetPosition(newPlacement);
+    }
 
-        if (_placement != null)
-            transform.position = _placement.Position;
+    private void SetPosition(IPlacement newPlacement)
+    {
+        transform.position = newPlacement.Position;
     }
 }
