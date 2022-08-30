@@ -1,0 +1,41 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/Editor/ItemDatabase.uss?fileID=7433441132597879392&amp;guid=1f5e74a68121a7e418e677f589a34efa&amp;type=3#ItemDatabase" />
+    <ui:VisualElement name="Container" style="flex-grow: 1; flex-direction: row; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+        <ui:VisualElement name="ItemsTab" style="width: 25%;">
+            <ui:VisualElement name="Header" style="flex-direction: row; border-bottom-color: rgb(0, 0, 0); margin-bottom: 5px; min-width: auto; max-width: none; max-height: 30px; min-height: 30px;">
+                <ui:Label text="Items" display-tooltip-when-elided="true" style="flex-grow: 1; -unity-font-style: bold; font-size: 24px; -unity-text-align: middle-left;" />
+                <ui:Button text="+" display-tooltip-when-elided="true" name="Btn_AddItem" />
+            </ui:VisualElement>
+            <ui:Label text="Label" display-tooltip-when-elided="true" />
+        </ui:VisualElement>
+        <ui:VisualElement style="width: 1px; color: rgb(14, 14, 14); background-color: rgb(202, 202, 202); margin-left: 2px; margin-right: 2px;" />
+        <ui:ScrollView name="ScrollView_Details" style="width: 75%; color: rgb(253, 253, 253); background-color: rgba(106, 106, 106, 0); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;">
+            <ui:VisualElement name="Header" style="flex-direction: row; background-color: rgba(38, 38, 38, 0); -unity-text-align: upper-left; align-items: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-bottom-color: rgba(255, 183, 0, 0); border-bottom-width: 1px;">
+                <ui:Label text="Details" display-tooltip-when-elided="true" style="flex-grow: 1; -unity-font-style: bold; font-size: 24px; margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; background-color: rgba(0, 0, 0, 0);" />
+                <ui:Button text="Delete" display-tooltip-when-elided="true" name="Btn_DeleteItem" style="height: 25px; margin-right: 10px;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Content" style="flex-grow: 1;">
+                <ui:VisualElement name="Row" style="flex-direction: row; align-items: center;">
+                    <ui:VisualElement name="Container" style="flex-grow: 1; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+                        <ui:Label text="General" display-tooltip-when-elided="true" name="Header" class="details-header" />
+                        <ui:TextField picking-mode="Ignore" label="Name" value="filler text" binding-path="FriendlyName" name="GearName" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                        <uie:ObjectField label="Icon" name="SpritePicker" binding-path="Icon" type="UnityEngine.Sprite, UnityEngine.CoreModule" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                        <ui:MinMaxSlider picking-mode="Ignore" label="Radius" min-value="0" max-value="64" low-limit="0" high-limit="64" name="GearRadius" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+                            <ui:VisualElement name="Containter" style="flex-direction: row; margin-left: 4px; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                                <uie:FloatField value="42,2" name="InnerRadiusFloat" style="margin-left: 0; width: 48px;" />
+                                <uie:FloatField value="42,2" name="OuterRadiusFloat" style="margin-left: 0; width: 48px;" />
+                            </ui:VisualElement>
+                        </ui:MinMaxSlider>
+                        <uie:Vector2Field label="Offset" name="GearOffset" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="Row" style="flex-direction: row; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; flex-basis: auto; flex-wrap: nowrap;">
+                    <ui:VisualElement name="Icon" style="padding-right: 0; width: 256px; height: 256px; background-image: url(&apos;project://database/Assets/Editor/UnknownIcon.png?fileID=2800000&amp;guid=de87c39e196a29a43aad03b09df6de6c&amp;type=3#UnknownIcon&apos;); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; padding-left: 0; padding-top: 0; padding-bottom: 0; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; flex-direction: column; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+                        <ui:VisualElement name="OuterRadius" style="width: 100%; height: 100%; position: absolute;" />
+                        <ui:VisualElement name="InnerRadius" style="width: 100%; height: 100%; position: absolute;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>
