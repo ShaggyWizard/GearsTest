@@ -18,12 +18,16 @@ public class PlayerGrabber : MonoBehaviour
             //Debug.Log("Trying to pick up");
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+            RaycastHit2D[] hit = Physics2D.RaycastAll(mousePos, Vector2.zero);
 
-            if (hit.transform != null && hit.transform.TryGetComponent(out _target))
+            for (int i = 0; i < hit.Length; i++)
             {
-                _target.PickUp(_camera.ScreenToWorldPoint(Input.mousePosition));
-                //Debug.Log("Picked up");
+                if (hit[i].transform != null && hit[i].transform.TryGetComponent(out _target))
+                {
+                    _target.PickUp(_camera.ScreenToWorldPoint(Input.mousePosition));
+                    break;
+                    //Debug.Log("Picked up");
+                }
             }
         }
         if (Input.GetMouseButton(0) && _target != null)

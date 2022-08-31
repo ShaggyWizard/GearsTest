@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 
@@ -42,7 +43,14 @@ public class Level : MonoBehaviour
 
     public void RandomizePositions()
     {
-        
+        var pins = _pinsContainer.GetComponentsInChildren<Pin>().ToList();
+        var gears = _gearsContainer.GetComponentsInChildren<Gear>();
+        for (int i = 0; i < gears.Length; i++)
+        {
+            int randomPinIndex = Random.Range(0, pins.Count);
+            gears[i].transform.position = pins[randomPinIndex].transform.position;
+            pins.RemoveAt(randomPinIndex);
+        }
     }
 
     private void CountMatch(bool match)
