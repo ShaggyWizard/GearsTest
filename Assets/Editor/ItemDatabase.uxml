@@ -4,15 +4,15 @@
         <ui:VisualElement name="ItemsTab" style="width: 25%;">
             <ui:VisualElement name="Header" style="flex-direction: row; border-bottom-color: rgb(0, 0, 0); margin-bottom: 5px; min-width: auto; max-width: none; max-height: 30px; min-height: 30px;">
                 <ui:Label text="Items" display-tooltip-when-elided="true" style="flex-grow: 1; -unity-font-style: bold; font-size: 24px; -unity-text-align: middle-left;" />
-                <ui:Button text="+" display-tooltip-when-elided="true" name="Btn_AddItem" />
+                <ui:Button text="+" display-tooltip-when-elided="true" name="ButtonAddItem" />
             </ui:VisualElement>
-            <ui:Label text="Label" display-tooltip-when-elided="true" />
         </ui:VisualElement>
         <ui:VisualElement style="width: 1px; color: rgb(14, 14, 14); background-color: rgb(202, 202, 202); margin-left: 2px; margin-right: 2px;" />
         <ui:ScrollView name="ScrollView_Details" style="width: 75%; color: rgb(253, 253, 253); background-color: rgba(106, 106, 106, 0); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;">
             <ui:VisualElement name="Header" style="flex-direction: row; background-color: rgba(38, 38, 38, 0); -unity-text-align: upper-left; align-items: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-bottom-color: rgba(255, 183, 0, 0); border-bottom-width: 1px;">
                 <ui:Label text="Details" display-tooltip-when-elided="true" style="flex-grow: 1; -unity-font-style: bold; font-size: 24px; margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; background-color: rgba(0, 0, 0, 0);" />
-                <ui:Button text="Delete" display-tooltip-when-elided="true" name="Btn_DeleteItem" style="height: 25px; margin-right: 10px;" />
+                <ui:Button text="Save" display-tooltip-when-elided="true" name="ButtonSave" style="height: 25px; margin-right: 10px;" />
+                <ui:Button text="Delete" display-tooltip-when-elided="true" name="ButtonDeleteItem" style="height: 25px; margin-right: 10px;" />
             </ui:VisualElement>
             <ui:VisualElement name="Content" style="flex-grow: 1;">
                 <ui:VisualElement name="Row" style="flex-direction: row; align-items: center;">

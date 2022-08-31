@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/Editor/ItemDatabase.uss?fileID=7433441132597879392&amp;guid=1f5e74a68121a7e418e677f589a34efa&amp;type=3#ItemDatabase" />
+    <ui:VisualElement name="Container" style="flex-grow: 1; flex-direction: row; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+        <ui:VisualElement name="Column" style="width: 25%; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+            <ui:VisualElement name="Row" style="flex-wrap: nowrap; justify-content: flex-start; margin-left: 4px; margin-right: 4px; margin-top: 2px; margin-bottom: 2px; min-height: auto; min-width: auto;">
+                <ui:VisualElement name="Header" style="flex-direction: row; height: 21px;">
+                    <ui:Label text="Level" display-tooltip-when-elided="true" style="flex-grow: 1; -unity-text-align: lower-left;" />
+                    <ui:Button text="Create New" display-tooltip-when-elided="true" name="ButtonCreateNewLevel" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 8px; padding-right: 8px; padding-top: 0; padding-bottom: 0;" />
+                </ui:VisualElement>
+                <uie:ObjectField type="LevelObject, Assembly-CSharp" name="LevelObject" style="margin-left: 0; margin-right: 0; margin-top: 2px; margin-bottom: 0;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Row" style="flex-wrap: nowrap; justify-content: flex-start; margin-left: 4px; margin-right: 4px; margin-top: 2px; margin-bottom: 2px; min-height: auto; min-width: auto;">
+                <ui:VisualElement name="Header" style="flex-direction: row; height: 21px;">
+                    <ui:Label text="Level Name" display-tooltip-when-elided="true" style="flex-grow: 1; -unity-text-align: lower-left;" />
+                </ui:VisualElement>
+                <ui:TextField picking-mode="Ignore" name="LevelName" style="margin-left: 0; margin-right: 0; margin-top: 2px; margin-bottom: 0;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Row" style="height: 100%; margin-left: 4px; margin-right: 4px; margin-top: 2px; margin-bottom: 2px; flex-grow: 0;">
+                <ui:VisualElement name="Header" style="flex-direction: row; height: 18px;">
+                    <ui:Label text="Gears" display-tooltip-when-elided="true" style="flex-grow: 1; -unity-text-align: lower-left;" />
+                    <ui:Button text="+" display-tooltip-when-elided="true" name="ButtonAdd" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 8px; padding-right: 8px; padding-top: 0; padding-bottom: 0;" />
+                    <ui:Button text="-" display-tooltip-when-elided="true" name="ButtonRemove" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 8px; padding-right: 8px; padding-top: 0; padding-bottom: 0;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="GearsListTab" style="border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; flex-grow: 0; height: 100%; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-top: 2px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="View" style="justify-content: center; align-items: center; flex-grow: 1; flex-shrink: 1; display: flex; overflow: hidden;" />
+    </ui:VisualElement>
+</ui:UXML>

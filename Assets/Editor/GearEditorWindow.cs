@@ -9,15 +9,15 @@ using UnityEngine.UIElements;
 
 public class GearEditorWindow : EditorWindow
 {
-    private static List<GearObject> _itemDatabase = new List<GearObject>();
+    private List<GearObject> _itemDatabase = new List<GearObject>();
 
     private VisualElement _itemsTab;
-    private ListView ItemListView;
+    private ListView _itemListView;
     private static VisualTreeAsset _itemRowTemplate;
     private Sprite _defaultItemIcon;
 
     private ScrollView _detailSection;
-    private GearObject _activeItem;
+    private GearObject _activeObject;
 
     private TextField _nameField;
     private ObjectField _spritePicker;
@@ -32,6 +32,8 @@ public class GearEditorWindow : EditorWindow
 
     private const int _itemHeight = 60;
     private const float _circleWidth = 1f;
+    private const string _gearsFolder = "Assets/Data/Gears/";
+    private const string _fileExtension = ".asset";
 
 
     [MenuItem("Gears Game Tools/Gears Editor")]
@@ -67,23 +69,25 @@ public class GearEditorWindow : EditorWindow
         _outerRadiusFloat = _detailSection.Q<FloatField>("OuterRadiusFloat");
         _offsetField = _detailSection.Q<Vector2Field>("GearOffset");
 
-        LoadAllItems();
+        _itemDatabase = DataLoader.LoadGearsData();
 
         _itemsTab = rootVisualElement.Q<VisualElement>("ItemsTab");
         GenerateListView();
 
-        rootVisualElement.Q<Button>("Btn_AddItem").clicked += AddItem;
-        rootVisualElement.Q<Button>("Btn_DeleteItem").clicked += DeleteItem;
+        rootVisualElement.Q<Button>("ButtonAddItem").clicked += AddItem;
+        rootVisualElement.Q<Button>("ButtonDeleteItem").clicked += DeleteItem;
+        rootVisualElement.Q<Button>("ButtonSave").clicked += Save;
 
         _nameField.RegisterValueChangedCallback(evt =>
         {
-            _activeItem.displayName = evt.newValue;
-            ItemListView.Rebuild();
+            _activeObject.displayName = evt.newValue;
+            _activeObject.changed = true;
+            _itemListView.Rebuild();
         });
         _spritePicker.RegisterValueChangedCallback(evt =>
         {
             Sprite newSprite = evt.newValue as Sprite;
-            _activeItem.sprite = newSprite == null ? _defaultItemIcon : newSprite;
+            _activeObject.sprite = newSprite == null ? _defaultItemIcon : newSprite;
             if (newSprite != null)
             {
                 _gearPreview.style.width = newSprite.texture.width;
@@ -92,36 +96,42 @@ public class GearEditorWindow : EditorWindow
                 float maxRadius = Mathf.Max(newSprite.texture.width, newSprite.texture.height) / 2f;
                 _radiusSlider.highLimit = maxRadius * 0.01f;
             }
-            ItemListView.Rebuild();
+            _activeObject.changed = true;
+            _itemListView.Rebuild();
         });
         _radiusSlider.RegisterValueChangedCallback(evt =>
         {
-            _activeItem.innerRadius = evt.newValue.x;
-            _activeItem.outerRadius = evt.newValue.y;
-            _innerRadiusFloat.value = evt.newValue.x;
-            _outerRadiusFloat.value = evt.newValue.y;
+            _activeObject.innerRadius = evt.newValue.x;
+            _activeObject.outerRadius = evt.newValue.y;
+            _innerRadiusFloat.SetValueWithoutNotify(evt.newValue.x);
+            _outerRadiusFloat.SetValueWithoutNotify(evt.newValue.y);
+
             UpdatePreview();
-            ItemListView.Rebuild();
+            _activeObject.changed = true;
+            _itemListView.Rebuild();
         });
         _innerRadiusFloat.RegisterValueChangedCallback(evt =>
         {
-            _activeItem.innerRadius = evt.newValue;
-            _radiusSlider.minValue = evt.newValue;
+            _activeObject.innerRadius = evt.newValue;
+            _radiusSlider.SetValueWithoutNotify(new Vector2(evt.newValue, _radiusSlider.maxValue));
             UpdatePreview();
-            ItemListView.Rebuild();
+            _activeObject.changed = true;
+            _itemListView.Rebuild();
         });
         _outerRadiusFloat.RegisterValueChangedCallback(evt =>
         {
-            _activeItem.outerRadius = evt.newValue;
-            _radiusSlider.maxValue = evt.newValue;
+            _activeObject.outerRadius = evt.newValue;
+            _radiusSlider.SetValueWithoutNotify(new Vector2(_radiusSlider.minValue, evt.newValue));
             UpdatePreview();
-            ItemListView.Rebuild();
+            _activeObject.changed = true;
+            _itemListView.Rebuild();
         });
         _offsetField.RegisterValueChangedCallback(evt =>
         {
-            _activeItem.offset = evt.newValue;
+            _activeObject.offset = evt.newValue;
             UpdatePreview();
-            ItemListView.Rebuild();
+            _activeObject.changed = true;
+            _itemListView.Rebuild();
         });
     }
 
@@ -132,17 +142,16 @@ public class GearEditorWindow : EditorWindow
         newItem.displayName = $"New Gear";
         AssetDatabase.CreateAsset(newItem, $"Assets/Data/{newItem.ID}.asset");
         _itemDatabase.Add(newItem);
-        ItemListView.Rebuild();
-        ItemListView.style.height = _itemDatabase.Count * _itemHeight;
-        ItemListView.style.height = _itemDatabase.Count * _itemHeight + 5;
-        ItemListView.SetSelection(_itemDatabase.Count - 1);
+        _itemListView.Rebuild();
+        _itemListView.style.height = _itemDatabase.Count * _itemHeight;
+        _itemListView.SetSelection(_itemDatabase.Count - 1);
     }
     private void DeleteItem()
     {
-        string path = AssetDatabase.GetAssetPath(_activeItem);
+        string path = AssetDatabase.GetAssetPath(_activeObject);
         AssetDatabase.DeleteAsset(path);
-        _itemDatabase.Remove(_activeItem);
-        ItemListView.Rebuild();
+        _itemDatabase.Remove(_activeObject);
+        _itemListView.Rebuild();
         _detailSection.style.visibility = Visibility.Hidden;
     }
     private void LoadAllItems()
@@ -163,40 +172,46 @@ public class GearEditorWindow : EditorWindow
         Action<VisualElement, int> bindItem = (e, i) =>
         {
             e.Q<VisualElement>("Icon").style.backgroundImage = GetTexture(_itemDatabase[i]);
-            e.Q<Label>("Name").text = _itemDatabase[i].displayName;
+            string name = _itemDatabase[i].displayName;
+            if (_itemDatabase[i].changed)
+            {
+                name += " *";
+            }
+            e.Q<Label>("Name").text = name;
         };
-        ItemListView = new ListView(_itemDatabase, _itemHeight, makeItem, bindItem);
-        ItemListView.selectionType = SelectionType.Single;
-        ItemListView.style.height = _itemDatabase.Count * _itemHeight + 5;
-        _itemsTab.Add(ItemListView);
+        _itemListView = new ListView(_itemDatabase, _itemHeight, makeItem, bindItem);
+        _itemListView.selectionType = SelectionType.Single;
+        _itemListView.style.height = _itemDatabase.Count * _itemHeight + 5;
+        _itemsTab.Add(_itemListView);
 
 
-        ItemListView.onSelectionChange += OnSelect;
-        if (ItemListView.childCount > 0)
-            ItemListView.SetSelection(0);
+        _itemListView.onSelectionChange += OnSelect;
+        if (_itemListView.childCount > 0)
+            _itemListView.SetSelection(0);
     }
     private void OnSelect(IEnumerable<object> selectedItems)
     {
-        _activeItem = (GearObject)selectedItems.First();
-        SerializedObject so = new SerializedObject(_activeItem);
+        _activeObject = (GearObject)selectedItems.First();
+        SerializedObject so = new SerializedObject(_activeObject);
         _detailSection.Bind(so);
 
-        _nameField.value = _activeItem.displayName;
-        _spritePicker.value = _activeItem.sprite;
-        _spritePicker.value = _activeItem.sprite;
-        var newTexture = GetTexture(_activeItem);
+        _nameField.SetValueWithoutNotify(_activeObject.displayName);
+        _spritePicker.SetValueWithoutNotify(_activeObject.sprite);
+
+        var newTexture = GetTexture(_activeObject);
         //This is used because style.width is not updated immediately
         _textureSize = new Vector2Int(newTexture.width, newTexture.height);
+
         _gearPreview.style.width = newTexture.width;
         _gearPreview.style.height = newTexture.height;
         _gearPreview.style.backgroundImage = newTexture;
+        _innerRadiusFloat.SetValueWithoutNotify(_activeObject.innerRadius);
+        _outerRadiusFloat.SetValueWithoutNotify(_activeObject.outerRadius);
+        _radiusSlider.SetValueWithoutNotify(new Vector2(_activeObject.innerRadius, _activeObject.outerRadius));
         float maxRadius = Mathf.Max(newTexture.width, newTexture.height) / 2f;
         _radiusSlider.highLimit = maxRadius * 0.01f;
-        _innerRadiusFloat.value = _activeItem.innerRadius;
-        _outerRadiusFloat.value = _activeItem.outerRadius;
-        _radiusSlider.value = new Vector2(_activeItem.innerRadius, _activeItem.outerRadius);
-        _offsetField.value = _activeItem.offset;
-        _offsetField.value = _activeItem.offset;
+        _offsetField.SetValueWithoutNotify(_activeObject.offset);
+        _offsetField.SetValueWithoutNotify(_activeObject.offset);
         UpdatePreview();
         _detailSection.style.visibility = Visibility.Visible;
     }
@@ -210,7 +225,18 @@ public class GearEditorWindow : EditorWindow
     }
     private void UpdatePreview()
     {
-        _innerRadiusPreview.style.backgroundImage = CircleGenerator.GetTexture(_textureSize, _activeItem.offset, _activeItem.innerRadius, _circleWidth, Color.green);
-        _outerRadiusPreview.style.backgroundImage = CircleGenerator.GetTexture(_textureSize, _activeItem.offset, _activeItem.outerRadius, _circleWidth, Color.red);
+        _innerRadiusPreview.style.backgroundImage = CircleGenerator.GetTexture(_textureSize, _activeObject.offset, _activeObject.innerRadius, _circleWidth, Color.green);
+        _outerRadiusPreview.style.backgroundImage = CircleGenerator.GetTexture(_textureSize, _activeObject.offset, _activeObject.outerRadius, _circleWidth, Color.red);
+    }
+    private void Save()
+    {
+        _activeObject.changed = false;
+        EditorUtility.SetDirty(_activeObject);
+        string currentPath = AssetDatabase.GetAssetPath(_activeObject);
+        string newPath = AssetDatabase.GenerateUniqueAssetPath($"{_gearsFolder}{_activeObject.displayName}{_fileExtension}");
+        AssetDatabase.RenameAsset(currentPath, Path.GetFileName(newPath));
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        _itemListView.Rebuild();
     }
 }

@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af52f9e9f34fca744beab127600f4a2d, type: 3}
-  m_Name: 6D3FFDFC-75BA-4380-850C-58877F4F1EBF
+  m_Script: {fileID: 11500000, guid: 6c64f29504708da4682b5745b78251ef, type: 3}
+  m_Name: 5E2BDE3F-87B7-44CA-8FD3-D707299E8A22
   m_EditorClassIdentifier: 
-  ID: 6D3FFDFC-75BA-4380-850C-58877F4F1EBF
-  displayName: New Gear
-  innerRadius: 0
-  outerRadius: 0
-  sprite: {fileID: 0}
-  offset: {x: 0, y: 0}
+  changed: 0
+  ID: 5E2BDE3F-87B7-44CA-8FD3-D707299E8A22
+  displayName: 

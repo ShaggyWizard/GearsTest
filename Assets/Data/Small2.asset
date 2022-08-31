@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af52f9e9f34fca744beab127600f4a2d, type: 3}
-  m_Name: AA9D9081-817F-4C8B-B07D-17E645707943
+  m_Name: Small2
   m_EditorClassIdentifier: 
-  ID: AA9D9081-817F-4C8B-B07D-17E645707943
-  displayName: New Gear
-  innerRadius: 0
-  outerRadius: 0
-  sprite: {fileID: 0}
+  changed: 0
+  ID: 2DDEBE66-EE3F-458C-8A85-D22542633DDB
+  displayName: Small2
+  innerRadius: 0.34355396
+  outerRadius: 0.4526829
+  sprite: {fileID: 21300000, guid: eb8e6153bf321c3498433247effee60e, type: 3}
   offset: {x: 0, y: 0}

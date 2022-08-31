@@ -1,11 +1,8 @@
-using System;
 using UnityEngine;
 
 
-public class GearObject : ScriptableObject
+public class GearObject : DataObject
 {
-    public string ID = Guid.NewGuid().ToString().ToUpper();
-    public string displayName;
     public float innerRadius;
     public float outerRadius;
     public Sprite sprite;

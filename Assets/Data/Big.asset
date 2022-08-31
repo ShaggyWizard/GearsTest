@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af52f9e9f34fca744beab127600f4a2d, type: 3}
+  m_Name: Big
+  m_EditorClassIdentifier: 
+  changed: 0
+  ID: 015CADE9-524E-45C7-A761-4CB6BC47AFF5
+  displayName: Big
+  innerRadius: 1.1571428
+  outerRadius: 1.2628223
+  sprite: {fileID: 21300000, guid: bf602a3cf78ee6d45a635f786d59ed04, type: 3}
+  offset: {x: 0.06, y: -0.02}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 [SelectionBase]
 [RequireComponent(typeof(CircleCollider2D))]
-public class Gear : MonoBehaviour, IDragable, IPlaceable
+public class GearView : MonoBehaviour, IDragable, IPlaceable
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private CircleCollider2D _collider;
