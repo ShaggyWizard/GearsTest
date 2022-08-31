@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c64f29504708da4682b5745b78251ef, type: 3}
+  m_Name: TestLevel
+  m_EditorClassIdentifier: 
+  changed: 0
+  ID: F9E711B0-04C3-4EFE-BFE3-88E7D21FF075
+  displayName: TestLevel
+  gears:
+  - position: {x: -2.4937277, y: -1.0845647}
+    gearObject: {fileID: 11400000, guid: 478c1651543a3e94097cae779b2e9936, type: 2}
+  - position: {x: -0.8861273, y: -0.9999521}
+    gearObject: {fileID: 11400000, guid: b0305e2907e5a4e4f9a51c37945f36c4, type: 2}
+  - position: {x: -0.3294387, y: 0.08391109}
+    gearObject: {fileID: 11400000, guid: d7615e2e56f95d94cbf2525043bcdba3, type: 2}
+  - position: {x: 0.6995919, y: -0.0011909008}
+    gearObject: {fileID: 11400000, guid: 8c79f6c366163ab43a91d142d53288de, type: 2}
+  - position: {x: 0.9458035, y: -0.5958033}
+    gearObject: {fileID: 11400000, guid: 3bbe5807cd04ad84682c500c9ee84732, type: 2}
+  - position: {x: 2.4963439, y: -1.1526263}
+    gearObject: {fileID: 11400000, guid: 478c1651543a3e94097cae779b2e9936, type: 2}

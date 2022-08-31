@@ -56,6 +56,7 @@ public class LevelEditorWindow : EditorWindow
         rootVisualElement.Q<Button>("ButtonAdd").clicked += AddGear;
         rootVisualElement.Q<Button>("ButtonRemove").clicked += RemoveGear;
         rootVisualElement.Q<Button>("ButtonCreateNewLevel").clicked += CreateNewLevelObject;
+        rootVisualElement.Q<Button>("ButtonSave").clicked += Save;
 
         var bgSprite = (Sprite)AssetDatabase.LoadAssetAtPath(_levelImage, typeof(Sprite));
         var bg = new VisualElement();
@@ -66,16 +67,27 @@ public class LevelEditorWindow : EditorWindow
 
         _levelObjectField.RegisterValueChangedCallback(evt =>
         {
+            for (int i = 0; i < _solutionGears.Count; i++)
+            {
+                _view.Remove(_solutionGears[i]);
+            }
+            _solutionGears.Clear();
             LevelObject newLevelObject = (LevelObject)evt.newValue;
             _activeObject = newLevelObject;
-        });
-        _levelNameField.RegisterValueChangedCallback(evt =>
-        {
-            EditorUtility.SetDirty(_activeObject);
-            string currentPath = AssetDatabase.GetAssetPath(_activeObject);
-            string newPath = AssetDatabase.GenerateUniqueAssetPath($"{_levelsFolder}{evt.newValue}{_fileExtension}");
-            AssetDatabase.RenameAsset(currentPath, Path.GetFileName(newPath));
-            AssetDatabase.Refresh();
+
+            if (_activeObject != null && _activeObject.gears != null)
+            {
+                for (int i = 0; i < _activeObject.gears.Length; i++)
+                {
+                    AddGear();
+                    _solutionGears.Last().SetGearObject(_activeObject.gears[i].gearObject);
+                    _solutionGears.Last().transform.position = _activeObject.gears[i].position * new Vector2(1f, -1f) * 100f;
+                }
+            }
+
+            _gearsListView.style.height = _solutionGears.Count * _itemHeight;
+            _gearsListView.Rebuild();
+            UpdateView();
         });
 
         PopulateGearsData();
@@ -87,9 +99,12 @@ public class LevelEditorWindow : EditorWindow
     private void CreateNewLevelObject()
     {
         LevelObject newItem = CreateInstance<LevelObject>();
-        AssetDatabase.CreateAsset(newItem, $"{_levelsFolder}{newItem.ID}{_fileExtension}");
+        string path = AssetDatabase.GenerateUniqueAssetPath($"{_levelsFolder}New Level{_fileExtension}");
+        AssetDatabase.CreateAsset(newItem, path);
+        newItem.displayName = Path.GetFileNameWithoutExtension(path);
+
         _activeObject = newItem;
-        _levelObjectField.SetValueWithoutNotify(_activeObject);
+        UpdateView();
     }
 
     private void PopulateGearsData()
@@ -106,6 +121,12 @@ public class LevelEditorWindow : EditorWindow
             _gearsDataChoises.Add(gearName);
         }
     }
+    private void UpdateView()
+    {
+        if (_activeObject == null) { return; }
+        _levelObjectField.SetValueWithoutNotify(_activeObject);
+        _levelNameField.SetValueWithoutNotify(_activeObject.displayName);
+    }
     private void GenerateListView()
     {
         Func<VisualElement> makeItem = () => _gearListItem.CloneTree();
@@ -115,7 +136,13 @@ public class LevelEditorWindow : EditorWindow
 
             var dropDown = e.Q<DropdownField>("GearType");
             dropDown.choices = _gearsDataChoises;
-            dropDown.value = _solutionGears[i].gearObject.name;
+            dropDown.SetValueWithoutNotify(_solutionGears[i].gearObject.name);
+
+            Sprite gearSprite = _solutionGears[i].gearObject.sprite;
+            if (gearSprite != null)
+            {
+                e.Q<VisualElement>("Icon").style.backgroundImage = gearSprite.texture;
+            }
 
             dropDown.RegisterValueChangedCallback(evt =>
             {
@@ -131,7 +158,7 @@ public class LevelEditorWindow : EditorWindow
         };
         _gearsListView = new ListView(_solutionGears, _itemHeight, makeItem, bindItem);
         _gearsListView.selectionType = SelectionType.Single;
-        _gearsListView.style.height = _solutionGears.Count * _itemHeight + 5;
+        _gearsListView.style.height = _solutionGears.Count * _itemHeight;
         _gearsListTab.Add(_gearsListView);
 
         if (_gearsListView.childCount > 0)
@@ -139,6 +166,8 @@ public class LevelEditorWindow : EditorWindow
     }
     private void AddGear()
     {
+        if (_activeObject == null) { return; }
+
         GearVisual newGear = new GearVisual();
         newGear.SetGearObject(_gearsData.First().Value);
         _view.Add(newGear);
@@ -160,6 +189,8 @@ public class LevelEditorWindow : EditorWindow
     }
     private void RemoveGear()
     {
+        if (_activeObject == null) { return; }
+
         if (_solutionGears.Count == 0) { return; }
 
         _view.Remove(_solutionGears[_solutionGears.Count - 1]);
@@ -170,5 +201,32 @@ public class LevelEditorWindow : EditorWindow
             _gearsListView.ClearSelection();
         }
         _gearsListView.Rebuild();
+    }
+    private void Save()
+    {
+        if (_activeObject == null) { return; }
+
+        _activeObject.gears = new LevelGear[_solutionGears.Count];
+        for (int i = 0; i < _solutionGears.Count; i++)
+        {
+            _activeObject.gears[i] = new LevelGear(_solutionGears[i]);
+        }
+        
+        _activeObject.changed = false;
+
+        if (Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_activeObject)) != _levelNameField.value && _levelNameField.value != "")
+        {
+            string currentPath = AssetDatabase.GetAssetPath(_activeObject);
+            string newPath = AssetDatabase.GenerateUniqueAssetPath($"{_levelsFolder}{_levelNameField.value}{_fileExtension}");
+            string newFileName = Path.GetFileNameWithoutExtension(newPath);
+            AssetDatabase.RenameAsset(currentPath, newFileName);
+            _activeObject = (LevelObject)AssetDatabase.LoadAssetAtPath(newPath, typeof(LevelObject));
+            _activeObject.displayName = _levelNameField.value;
+        }
+        UpdateView();
+
+        EditorUtility.SetDirty(_activeObject);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 }

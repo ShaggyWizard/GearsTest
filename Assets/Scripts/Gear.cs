@@ -4,22 +4,21 @@ using UnityEngine;
 
 [SelectionBase]
 [RequireComponent(typeof(CircleCollider2D))]
-public class GearView : MonoBehaviour, IDragable, IPlaceable
+public class Gear : MonoBehaviour, IDragable, IPlaceable, IMatch
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private CircleCollider2D _collider;
-    [SerializeField] private GearObject _gearObject;
 
 
-    private int lastIndex;
     private DragableObject _dragable;
-
+    public string MatchID { get; private set; }
     public IPlacement Placement { get; private set; }
+
 
     private void Start()
     {
         _dragable = new DragableObject(transform);
-        Init(_gearObject);
+
         Release();
     }
 
@@ -29,6 +28,7 @@ public class GearView : MonoBehaviour, IDragable, IPlaceable
         _spriteRenderer.sprite = gearSO.sprite;
         _spriteRenderer.transform.localPosition = gearSO.offset * -1f;
         _collider.radius = gearSO.innerRadius;
+        MatchID = gearSO.ID;
     }
     public void PickUp(Vector3 clickPos)
     {

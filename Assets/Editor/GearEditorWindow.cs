@@ -140,7 +140,8 @@ public class GearEditorWindow : EditorWindow
     {
         GearObject newItem = CreateInstance<GearObject>();
         newItem.displayName = $"New Gear";
-        AssetDatabase.CreateAsset(newItem, $"Assets/Data/{newItem.ID}.asset");
+        string path = AssetDatabase.GenerateUniqueAssetPath($"{_gearsFolder}{newItem.displayName}{_fileExtension}");
+        AssetDatabase.CreateAsset(newItem, path);
         _itemDatabase.Add(newItem);
         _itemListView.Rebuild();
         _itemListView.style.height = _itemDatabase.Count * _itemHeight;
@@ -153,18 +154,6 @@ public class GearEditorWindow : EditorWindow
         _itemDatabase.Remove(_activeObject);
         _itemListView.Rebuild();
         _detailSection.style.visibility = Visibility.Hidden;
-    }
-    private void LoadAllItems()
-    {
-        _itemDatabase.Clear();
-
-        string[] allPaths = Directory.GetFiles("Assets/Data", "*.asset", SearchOption.AllDirectories);
-
-        foreach (string path in allPaths)
-        {
-            string cleanedPath = path.Replace("\\", "/");
-            _itemDatabase.Add((GearObject)AssetDatabase.LoadAssetAtPath(cleanedPath, typeof(GearObject)));
-        }
     }
     private void GenerateListView()
     {

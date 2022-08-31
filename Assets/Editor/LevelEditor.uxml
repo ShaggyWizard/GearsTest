@@ -7,7 +7,10 @@
                     <ui:Label text="Level" display-tooltip-when-elided="true" style="flex-grow: 1; -unity-text-align: lower-left;" />
                     <ui:Button text="Create New" display-tooltip-when-elided="true" name="ButtonCreateNewLevel" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 8px; padding-right: 8px; padding-top: 0; padding-bottom: 0;" />
                 </ui:VisualElement>
-                <uie:ObjectField type="LevelObject, Assembly-CSharp" name="LevelObject" style="margin-left: 0; margin-right: 0; margin-top: 2px; margin-bottom: 0;" />
+                <ui:VisualElement name="Header" style="flex-direction: row-reverse; height: 21px; flex-grow: 0; margin-top: 2px; width: 100%; justify-content: flex-start; align-items: stretch; flex-shrink: 1;">
+                    <uie:ObjectField type="LevelObject, Assembly-CSharp" name="LevelObject" style="flex-grow: 1; flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 0;" />
+                    <ui:Button text="Save" display-tooltip-when-elided="true" name="ButtonSave" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 8px; padding-right: 8px; padding-top: 0; padding-bottom: 0; flex-grow: 0; width: 42px; height: auto; align-items: auto;" />
+                </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="Row" style="flex-wrap: nowrap; justify-content: flex-start; margin-left: 4px; margin-right: 4px; margin-top: 2px; margin-bottom: 2px; min-height: auto; min-width: auto;">
                 <ui:VisualElement name="Header" style="flex-direction: row; height: 21px;">
