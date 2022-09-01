@@ -15,6 +15,7 @@ public class Level : MonoBehaviour
     [SerializeField] private Transform _gearsContainer;
     [Header("Option")]
     [SerializeField] private float _rotationSpeed;
+    [SerializeField] private float _accelerationTime;
 
 
     private int _remaining = 0;
@@ -33,6 +34,7 @@ public class Level : MonoBehaviour
     public void Parse(LevelObject level)
     {
         _remaining = level.gears.Length;
+        _pinsList = new List<Pin>();
         _gearsList = new List<Gear>();
         for (int i = 0; i < level.gears.Length; i++)
         {
@@ -84,20 +86,31 @@ public class Level : MonoBehaviour
             gear.Lock(true);
         }
         _winAnimation = true;
-        StartCoroutine(RotateGears());
+        StartCoroutine(WinAnimation());
     }
-    private IEnumerator RotateGears()
+    private IEnumerator WinAnimation()
     {
+        float time = 0;
+        while (time < _accelerationTime)
+        {
+            RotateGears(Mathf.Lerp(0, _rotationSpeed, time));
+            time += Time.deltaTime;
+            yield return null;
+        }
         while (_winAnimation)
         {
-            for (int i = 0; i < _pinsList.Count; i++)
-            {
-                var gear = (Gear)_pinsList[i].Placeable;
-                float speed = _rotationSpeed * Time.deltaTime;
-                speed *= i % 2 == 0 ? 1 : -1;
-                gear.Rotate(speed);
-            }
+            RotateGears(_rotationSpeed);
             yield return null;
+        }
+    }
+    private void RotateGears(float rotation)
+    {
+        for (int i = 0; i < _pinsList.Count; i++)
+        {
+            var gear = (Gear)_pinsList[i].Placeable;
+            float speed = rotation * Time.deltaTime;
+            speed *= i % 2 == 0 ? 1 : -1;
+            gear.Rotate(speed);
         }
     }
 }
