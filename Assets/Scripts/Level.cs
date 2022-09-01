@@ -8,6 +8,7 @@ public class Level : MonoBehaviour
 {
     [Header("Data and  Prefabs")]
     [SerializeField] private LevelObject _level;
+    [SerializeField] private AudioSource _audio;
     [SerializeField] private Gear _gearPrefab;
     [SerializeField] private Pin _pinPrefab;
     [Header("Containers")]
@@ -22,10 +23,13 @@ public class Level : MonoBehaviour
     private List<Pin> _pinsList;
     private List<Gear> _gearsList;
     private bool _winAnimation;
+    private float _fullVolume;
 
 
     private void Start()
     {
+        _fullVolume = _audio.volume;
+        _audio.volume = 0;
         Parse(_level);
         RandomizePositions();
     }
@@ -64,7 +68,7 @@ public class Level : MonoBehaviour
 
         for (int i = 0; i < _pinsList.Count; i++)
         {
-            _gearsList[i].transform.position = _pinsList[i].transform.position;
+            _pinsList[i].SetPlaceable(_gearsList[i]);
         }
     }
 
@@ -86,6 +90,7 @@ public class Level : MonoBehaviour
             gear.Lock(true);
         }
         _winAnimation = true;
+        _audio.Play();
         StartCoroutine(WinAnimation());
     }
     private IEnumerator WinAnimation()
@@ -93,10 +98,12 @@ public class Level : MonoBehaviour
         float time = 0;
         while (time < _accelerationTime)
         {
-            RotateGears(Mathf.Lerp(0, _rotationSpeed, time));
+            RotateGears(Mathf.Lerp(0, _rotationSpeed, time / _accelerationTime));
+            _audio.volume = Mathf.Lerp(0, _fullVolume, time / _accelerationTime);
             time += Time.deltaTime;
             yield return null;
         }
+        _audio.volume = _fullVolume;
         while (_winAnimation)
         {
             RotateGears(_rotationSpeed);

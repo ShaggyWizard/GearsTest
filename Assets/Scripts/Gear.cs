@@ -8,7 +8,8 @@ public class Gear : MonoBehaviour, IDragable, IPlaceable, IMatch
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private CircleCollider2D _collider;
-    [SerializeField] private float _rotationPerSecond;
+    [SerializeField] private AudioSource _audioPickUp;
+    [SerializeField] private AudioSource _audioPutDown;
 
 
     private DragableObject _dragable;
@@ -23,8 +24,6 @@ public class Gear : MonoBehaviour, IDragable, IPlaceable, IMatch
     private void Start()
     {
         _dragable = new DragableObject(transform);
-
-        Release();
     }
 
 
@@ -40,6 +39,7 @@ public class Gear : MonoBehaviour, IDragable, IPlaceable, IMatch
     {
         if (_lock) { return; }
         _dragable.PickUp(clickPos);
+        _audioPickUp.Play();
     }
     public void Drag(Vector3 clickPos)
     {
@@ -48,6 +48,7 @@ public class Gear : MonoBehaviour, IDragable, IPlaceable, IMatch
     }
     public void Release()
     {
+        _audioPutDown.Play();
         List<Collider2D> overlaps = new List<Collider2D>();
         var contactFilter = new ContactFilter2D();
         int colliderCount = _collider.OverlapCollider(contactFilter, overlaps);
