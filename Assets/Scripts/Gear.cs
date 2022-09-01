@@ -8,9 +8,14 @@ public class Gear : MonoBehaviour, IDragable, IPlaceable, IMatch
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private CircleCollider2D _collider;
+    [SerializeField] private float _rotationPerSecond;
 
 
     private DragableObject _dragable;
+    private bool _lock;
+    private float _rotationModifier;
+
+
     public string MatchID { get; private set; }
     public IPlacement Placement { get; private set; }
 
@@ -28,14 +33,17 @@ public class Gear : MonoBehaviour, IDragable, IPlaceable, IMatch
         _spriteRenderer.sprite = gearSO.sprite;
         _spriteRenderer.transform.localPosition = gearSO.offset * -1f;
         _collider.radius = gearSO.innerRadius;
+        CalculateRotationModifier(gearSO.innerRadius);
         MatchID = gearSO.ID;
     }
     public void PickUp(Vector3 clickPos)
     {
+        if (_lock) { return; }
         _dragable.PickUp(clickPos);
     }
     public void Drag(Vector3 clickPos)
     {
+        if (_lock) { return; }
         _dragable.Drag(clickPos);
     }
     public void Release()
@@ -80,9 +88,22 @@ public class Gear : MonoBehaviour, IDragable, IPlaceable, IMatch
         Placement = newPlacement;
         SetPosition(newPlacement);
     }
+    public void Lock(bool newLock)
+    {
+        _lock = newLock;
+    }
+    public void Rotate(float speed)
+    {
+        transform.rotation *= Quaternion.Euler(0, 0, speed * _rotationModifier);
+    }
+
 
     private void SetPosition(IPlacement newPlacement)
     {
         transform.position = newPlacement.Position;
+    }
+    private void CalculateRotationModifier(float radius)
+    {
+        _rotationModifier = 1f / radius;
     }
 }

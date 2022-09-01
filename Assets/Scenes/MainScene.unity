@@ -326,7 +326,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4254265469524979603, guid: 9fcb95227ae8efa4b842e51ec5be99cf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fcb95227ae8efa4b842e51ec5be99cf, type: 3}
@@ -506,9 +506,9 @@ MonoBehaviour:
   _unityEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1434595455}
-        m_TargetAssemblyTypeName: ActiveToggle, Assembly-CSharp
-        m_MethodName: Toggle
+      - m_Target: {fileID: 1434595456}
+        m_TargetAssemblyTypeName: TranslatePosition, Assembly-CSharp
+        m_MethodName: Translate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -584,7 +584,7 @@ MonoBehaviour:
   _pinPrefab: {fileID: 918407085272248958, guid: 598b912f57dbe4d4fa3e9ee83593381b, type: 3}
   _pinsContainer: {fileID: 944604189}
   _gearsContainer: {fileID: 39078630}
---- !u!114 &1434595455
+--- !u!114 &1434595456
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -593,6 +593,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 1434595453}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 856ef5052c2301642a931f25d7940af1, type: 3}
+  m_Script: {fileID: 11500000, guid: a76dd6c6b426b92459b59504d6c8037b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _target: {x: 0, y: -8, z: 0}
+  _time: 0.2
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 1
+    m_RotationOrder: 4
+  _snap: 1

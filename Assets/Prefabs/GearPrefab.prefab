@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5557471649182015919}
   - component: {fileID: 861816348306064485}
+  - component: {fileID: -8692586439895949418}
   - component: {fileID: 1927272181935475391}
   m_Layer: 0
   m_Name: GearPrefab
@@ -46,11 +47,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6acc3d331201264d8322352b49ff16d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _innerRadius: 0
-  _outerRadius: 0
-  _spriteOffset: {x: 0, y: 0}
   _spriteRenderer: {fileID: 3124721423427641546}
   _collider: {fileID: 1927272181935475391}
+  _rotation: {fileID: -8692586439895949418}
+  _rotationPerSecond: 0.25
+--- !u!114 &-8692586439895949418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3292576784467594352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f93cda08eec3b04b950ab0600416039, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {x: 0, y: 0, z: 0}
+  _time: 0
+  _curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 1
+    m_RotationOrder: 4
+  _loop: 0
+  _snap: 0
+  _resetStart: 1
+  test: 0
 --- !u!58 &1927272181935475391
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -145,7 +187,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.7, y: 2.61}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
